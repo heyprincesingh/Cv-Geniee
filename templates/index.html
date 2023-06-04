@@ -43,7 +43,7 @@ function handleUpload() {
     formData.append('pdf_file', selectedFile);
 
     // Make a POST request to the Flask API
-    fetch('http://fayib21497.pythonanywhere.com/api', {  // Update the URL here
+    fetch('http://fayib21497.pythonanywhere.com/api/upload', {  // Update the URL here
       method: 'POST',
       body: formData
     })
