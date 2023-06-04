@@ -5,9 +5,59 @@
 </head>
 <body>
     <h1>Upload a PDF file</h1>
-    <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="pdf_file">
-        <input type="submit" value="Upload">
-    </form>
+    <input type="file" id="pdfFile" name="pdf_file">
+    <button id="uploadButton" disabled>Upload</button>
+
+    <div id="resultContainer" style="display: none;">
+      <h2>Extracted Text:</h2>
+      <pre id="resultText"></pre>
+    </div>
+
+    <script>
+      // HTML element references
+const fileInput = document.getElementById('pdfFile');
+const uploadButton = document.getElementById('uploadButton');
+const resultContainer = document.getElementById('resultContainer');
+const resultText = document.getElementById('resultText');
+
+// Event listener for the file input
+fileInput.addEventListener('change', handleFileSelect);
+
+// Event listener for the upload button
+uploadButton.addEventListener('click', handleUpload);
+
+// Function to handle file selection
+function handleFileSelect(event) {
+  const selectedFile = event.target.files[0];
+  if (selectedFile) {
+    // Enable the upload button
+    uploadButton.disabled = false;
+  }
+}
+
+// Function to handle the upload button click
+function handleUpload() {
+  const selectedFile = fileInput.files[0];
+  if (selectedFile) {
+    const formData = new FormData();
+    formData.append('pdf_file', selectedFile);
+
+    // Make a POST request to the Flask API
+    fetch('http://fayib21497.pythonanywhere.com/api', {  // Update the URL here
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+      // Display the extracted text
+      resultText.textContent = data;
+      resultContainer.style.display = 'block';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+}
+    </script>
 </body>
 </html>
